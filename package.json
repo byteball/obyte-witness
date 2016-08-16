@@ -1,0 +1,27 @@
+{
+  "name": "byteball-witness",
+  "description": "Byteball witness",
+  "author": "Byteball",
+  "version": "0.1.0",
+  "main": "start.js",
+  "keywords": [
+    "witness",
+    "byteball"
+  ],
+  "license": "MIT",
+  "repository": {
+    "url": "git://github.com/byteball/byteball-witness.git",
+    "type": "git"
+  },
+  "bugs": {
+    "url": "https://github.com/byteball/byteball-witness/issues"
+  },
+  "browser": {
+    "request": "browser-request",
+    "secp256k1": "secp256k1/js"
+  },
+  "dependencies": {
+    "byteballcore": "git+https://github.com/byteball/byteballcore.git",
+    "headless-byteball": "git+https://github.com/byteball/headless-byteball.git"
+  }
+}
