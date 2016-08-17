@@ -1,11 +1,11 @@
 /*jslint node: true */
 "use strict";
-var conf = require('headless-byteball/node_modules/byteballcore/conf.js');
-var db = require('headless-byteball/node_modules/byteballcore/db.js');
-var eventBus = require('headless-byteball/node_modules/byteballcore/event_bus.js');
-var mail = require('headless-byteball/node_modules/byteballcore/mail.js');
+var conf = require('byteballcore/conf.js');
+var db = require('byteballcore/db.js');
+var eventBus = require('byteballcore/event_bus.js');
+var mail = require('byteballcore/mail.js');
 var headlessWallet = require('headless-byteball');
-var desktopApp = require('headless-byteball/node_modules/byteballcore/desktop_app.js');
+var desktopApp = require('byteballcore/desktop_app.js');
 
 var WITNESSING_COST = 600; // size of typical witnessing unit
 var my_address;
@@ -40,8 +40,8 @@ function witness(onDone){
 		notifyAdminAboutFailedWitnessing(err);
 		setTimeout(onDone, 60000); // pause after error
 	}
-	var network = require('headless-byteball/node_modules/byteballcore/network.js');
-	var composer = require('headless-byteball/node_modules/byteballcore/composer.js');
+	var network = require('byteballcore/network.js');
+	var composer = require('byteballcore/composer.js');
 	createOptimalOutputs(function(arrOutputs){
 		composer.composeAndSavePaymentJoint([my_address], arrOutputs, headlessWallet.signer, {
 			ifNotEnoughFunds: onError,
