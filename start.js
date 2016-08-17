@@ -38,7 +38,7 @@ function notifyAdminAboutWitnessingProblem(err){
 function witness(onDone){
 	function onError(err){
 		notifyAdminAboutFailedWitnessing(err);
-		onDone();
+		setTimeout(onDone, 60000); // pause after error
 	}
 	var network = require('headless-byteball/node_modules/byteballcore/network.js');
 	var composer = require('headless-byteball/node_modules/byteballcore/composer.js');
