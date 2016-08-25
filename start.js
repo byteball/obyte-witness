@@ -10,6 +10,7 @@ var desktopApp = require('byteballcore/desktop_app.js');
 var WITNESSING_COST = 600; // size of typical witnessing unit
 var my_address;
 var bWitnessingUnderWay = false;
+var forcedWitnessingTimer;
 
 if (!conf.bSingleAddress)
 	throw Error('witness must be single address');
@@ -55,12 +56,13 @@ function witness(onDone){
 }
 
 function checkAndWitness(){
+	clearTimeout(forcedWitnessingTimer);
 	if (bWitnessingUnderWay)
 		return;
 	bWitnessingUnderWay = true;
 	// abort if there are my units without an mci
-	db.query("SELECT 1 FROM units JOIN unit_authors USING(unit) WHERE address=? AND main_chain_index IS NULL LIMIT 1", [my_address], function(rows){
-		if (rows.length > 0){
+	determineIfThereAreMyUnitsWithoutMci(function(bMyUnitsWithoutMci){
+		if (bMyUnitsWithoutMci){
 			bWitnessingUnderWay = false;
 			return;
 		}
@@ -76,9 +78,46 @@ function checkAndWitness(){
 						bWitnessingUnderWay = false;
 					});
 				}
-				else
+				else{
 					bWitnessingUnderWay = false;
+					checkForUnconfirmedUnits(conf.THRESHOLD_DISTANCE - distance);
+				}
 			});
+		});
+	});
+}
+
+function determineIfThereAreMyUnitsWithoutMci(handleResult){
+	db.query("SELECT 1 FROM units JOIN unit_authors USING(unit) WHERE address=? AND main_chain_index IS NULL LIMIT 1", [my_address], function(rows){
+		handleResult(rows.length > 0);
+	});
+}
+
+function checkForUnconfirmedUnits(distance_to_threshold){
+	db.query( // look for unstable non-witness-authored units
+		"SELECT 1 FROM units JOIN unit_authors USING(unit) LEFT JOIN my_witnesses USING(address) WHERE is_stable=0 AND my_witnesses.address IS NULL LIMIT 1",
+		function(rows){
+			if (rows.length === 0)
+				return;
+			var timeout = distance_to_threshold*10000;
+			console.log('scheduling unconditional witnessing in '+timeout+' ms unless a new unit arrives');
+			forcedWitnessingTimer = setTimeout(witnessBeforeThreshold, timeout);
+		}
+	);
+}
+
+function witnessBeforeThreshold(){
+	if (bWitnessingUnderWay)
+		return;
+	bWitnessingUnderWay = true;
+	determineIfThereAreMyUnitsWithoutMci(function(bMyUnitsWithoutMci){
+		if (bMyUnitsWithoutMci){
+			bWitnessingUnderWay = false;
+			return;
+		}
+		console.log('will witness before threshold');
+		witness(function(){
+			bWitnessingUnderWay = false;
 		});
 	});
 }
