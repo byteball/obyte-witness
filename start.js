@@ -15,6 +15,7 @@ var forcedWitnessingTimer;
 if (!conf.bSingleAddress)
 	throw Error('witness must be single address');
 
+headlessWallet.setupChatEventHandlers();
 
 function notifyAdmin(subject, body){
 	mail.sendmail({
