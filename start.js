@@ -6,6 +6,7 @@ var eventBus = require('byteballcore/event_bus.js');
 var mail = require('byteballcore/mail.js');
 var headlessWallet = require('headless-byteball');
 var desktopApp = require('byteballcore/desktop_app.js');
+var objectHash = require('byteballcore/object_hash.js');
 
 var WITNESSING_COST = 600; // size of typical witnessing unit
 var my_address;
@@ -45,14 +46,31 @@ function witness(onDone){
 	var network = require('byteballcore/network.js');
 	var composer = require('byteballcore/composer.js');
 	createOptimalOutputs(function(arrOutputs){
-		composer.composeAndSavePaymentJoint([my_address], arrOutputs, headlessWallet.signer, {
-			ifNotEnoughFunds: onError,
-			ifError: onError,
-			ifOk: function(objJoint){
-				network.broadcastJoint(objJoint);
-				onDone();
-			}
-		});
+		let params = {
+			paying_addresses: [my_address], 
+			outputs: arrOutputs, 
+			signer: headlessWallet.signer, 
+			callbacks: composer.getSavingCallbacks({
+				ifNotEnoughFunds: onError,
+				ifError: onError,
+				ifOk: function(objJoint){
+					network.broadcastJoint(objJoint);
+					onDone();
+				}
+			})
+		};
+		if (conf.bPostTimestamp){
+			let timestamp = Date.now();
+			let datafeed = {timestamp: timestamp};
+			let objMessage = {
+				app: "data_feed",
+				payload_location: "inline",
+				payload_hash: objectHash.getBase64Hash(datafeed),
+				payload: datafeed
+			};
+			params.messages = [objMessage];
+		}
+		composer.composeJoint(params);
 	});
 }
 
