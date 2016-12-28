@@ -118,7 +118,7 @@ function checkForUnconfirmedUnits(distance_to_threshold){
 		function(rows){
 			if (rows.length === 0)
 				return;
-			var timeout = distance_to_threshold*10000;
+			var timeout = Math.round((distance_to_threshold + Math.random())*10000);
 			console.log('scheduling unconditional witnessing in '+timeout+' ms unless a new unit arrives');
 			forcedWitnessingTimer = setTimeout(witnessBeforeThreshold, timeout);
 		}
