@@ -114,7 +114,9 @@ function determineIfThereAreMyUnitsWithoutMci(handleResult){
 
 function checkForUnconfirmedUnits(distance_to_threshold){
 	db.query( // look for unstable non-witness-authored units
-		"SELECT 1 FROM units JOIN unit_authors USING(unit) LEFT JOIN my_witnesses USING(address) WHERE is_stable=0 AND my_witnesses.address IS NULL LIMIT 1",
+		"SELECT 1 FROM units CROSS JOIN unit_authors USING(unit) LEFT JOIN my_witnesses USING(address) \n\
+		WHERE main_chain_index>? AND my_witnesses.address IS NULL LIMIT 1",
+		[storage.getMinRetrievableMci()], // light clients see all retrievable as unconfirmed
 		function(rows){
 			if (rows.length === 0)
 				return;
