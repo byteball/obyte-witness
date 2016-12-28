@@ -2,6 +2,7 @@
 "use strict";
 var conf = require('byteballcore/conf.js');
 var db = require('byteballcore/db.js');
+var storage = require('byteballcore/storage.js');
 var eventBus = require('byteballcore/event_bus.js');
 var mail = require('byteballcore/mail.js');
 var headlessWallet = require('headless-byteball');
@@ -85,8 +86,7 @@ function checkAndWitness(){
 			bWitnessingUnderWay = false;
 			return;
 		}
-		db.query("SELECT MAX(main_chain_index) AS max_mci FROM units", function(rows){
-			var max_mci = rows[0].max_mci;
+		storage.readLastMainChainIndex(function(max_mci){
 			db.query("SELECT MAX(main_chain_index) AS max_my_mci FROM units JOIN unit_authors USING(unit) WHERE address=?", [my_address], function(rows){
 				var max_my_mci = (rows.length > 0) ? rows[0].max_my_mci : -1000;
 				var distance = max_mci - max_my_mci;
