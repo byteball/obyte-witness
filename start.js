@@ -93,9 +93,11 @@ function checkAndWitness(){
 				console.log("distance="+distance);
 				if (distance > conf.THRESHOLD_DISTANCE){
 					console.log('distance above threshold, will witness');
-					witness(function(){
-						bWitnessingUnderWay = false;
-					});
+					setTimeout(function(){
+						witness(function(){
+							bWitnessingUnderWay = false;
+						});
+					}, Math.round(Math.random()*3000));
 				}
 				else{
 					bWitnessingUnderWay = false;
