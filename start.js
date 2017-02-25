@@ -13,6 +13,7 @@ var WITNESSING_COST = 600; // size of typical witnessing unit
 var my_address;
 var bWitnessingUnderWay = false;
 var forcedWitnessingTimer;
+var count_witnessings_available = 0;
 
 if (!conf.bSingleAddress)
 	throw Error('witness must be single address');
@@ -151,6 +152,9 @@ function witnessBeforeThreshold(){
 }
 
 function readNumberOfWitnessingsAvailable(handleNumber){
+	count_witnessings_available--;
+	if (count_witnessings_available > conf.MIN_AVAILABLE_WITNESSINGS)
+		return handleNumber(count_witnessings_available);
 	db.query(
 		"SELECT COUNT(*) AS count_big_outputs FROM outputs JOIN units USING(unit) \n\
 		WHERE address=? AND is_stable=1 AND amount>=? AND asset IS NULL AND is_spent=0", 
@@ -170,7 +174,8 @@ function readNumberOfWitnessingsAvailable(handleNumber){
 				function(rows){
 					var total = rows.reduce(function(prev, row){ return (prev + row.total); }, 0);
 					var count_witnessings_paid_by_small_outputs_and_commissions = Math.round(total / WITNESSING_COST);
-					handleNumber(count_big_outputs + count_witnessings_paid_by_small_outputs_and_commissions);
+					count_witnessings_available = count_big_outputs + count_witnessings_paid_by_small_outputs_and_commissions;
+					handleNumber(count_witnessings_available);
 				}
 			);
 		}
