@@ -47,6 +47,10 @@ function witness(onDone){
 	}
 	var network = require('byteballcore/network.js');
 	var composer = require('byteballcore/composer.js');
+	if (!network.isConnected()){
+		console.log('not connected, skipping');
+		return onDone();
+	}
 	createOptimalOutputs(function(arrOutputs){
 		let params = {
 			paying_addresses: [my_address], 
