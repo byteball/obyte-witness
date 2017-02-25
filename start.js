@@ -87,23 +87,28 @@ function checkAndWitness(){
 			return;
 		}
 		storage.readLastMainChainIndex(function(max_mci){
-			db.query("SELECT MAX(main_chain_index) AS max_my_mci FROM units JOIN unit_authors USING(unit) WHERE address=?", [my_address], function(rows){
-				var max_my_mci = (rows.length > 0) ? rows[0].max_my_mci : -1000;
-				var distance = max_mci - max_my_mci;
-				console.log("distance="+distance);
-				if (distance > conf.THRESHOLD_DISTANCE){
-					console.log('distance above threshold, will witness');
-					setTimeout(function(){
-						witness(function(){
-							bWitnessingUnderWay = false;
-						});
-					}, Math.round(Math.random()*3000));
+			let col = (conf.storage === 'mysql') ? 'main_chain_index' : 'unit_authors.rowid';
+			db.query(
+				"SELECT main_chain_index AS max_my_mci FROM units JOIN unit_authors USING(unit) WHERE address=? ORDER BY "+col+" DESC LIMIT 1", 
+				[my_address], 
+				function(rows){
+					var max_my_mci = (rows.length > 0) ? rows[0].max_my_mci : -1000;
+					var distance = max_mci - max_my_mci;
+					console.log("distance="+distance);
+					if (distance > conf.THRESHOLD_DISTANCE){
+						console.log('distance above threshold, will witness');
+						setTimeout(function(){
+							witness(function(){
+								bWitnessingUnderWay = false;
+							});
+						}, Math.round(Math.random()*3000));
+					}
+					else{
+						bWitnessingUnderWay = false;
+						checkForUnconfirmedUnits(conf.THRESHOLD_DISTANCE - distance);
+					}
 				}
-				else{
-					bWitnessingUnderWay = false;
-					checkForUnconfirmedUnits(conf.THRESHOLD_DISTANCE - distance);
-				}
-			});
+			);
 		});
 	});
 }
