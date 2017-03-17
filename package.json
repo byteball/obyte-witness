@@ -2,7 +2,7 @@
   "name": "byteball-witness",
   "description": "Byteball witness",
   "author": "Byteball",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "main": "start.js",
   "keywords": [
     "witness",
@@ -21,7 +21,7 @@
     "secp256k1": "secp256k1/js"
   },
   "dependencies": {
-    "byteballcore": "^0.1.42",
+    "byteballcore": "^0.2.0",
     "headless-byteball": "git+https://github.com/byteball/headless-byteball.git"
   }
 }
