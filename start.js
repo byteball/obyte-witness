@@ -220,6 +220,9 @@ function createOptimalOutputs(handleOutputs){
 	});
 }
 
+db.query("CREATE UNIQUE INDEX IF NOT EXISTS hcobyAddressSpentMci ON headers_commission_outputs(address, is_spent, main_chain_index)");
+db.query("CREATE UNIQUE INDEX IF NOT EXISTS byWitnessAddressSpentMci ON witnessing_outputs(address, is_spent, main_chain_index)");
+
 eventBus.on('headless_wallet_ready', function(){
 	if (!conf.admin_email || !conf.from_email){
 		console.log("please specify admin_email and from_email in your "+desktopApp.getAppDataDir()+'/conf.json');
