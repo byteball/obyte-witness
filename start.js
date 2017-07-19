@@ -81,15 +81,16 @@ function witness(onDone){
 }
 
 function checkAndWitness(){
+	console.log('checkAndWitness');
 	clearTimeout(forcedWitnessingTimer);
 	if (bWitnessingUnderWay)
-		return;
+		return console.log('witnessing under way');
 	bWitnessingUnderWay = true;
 	// abort if there are my units without an mci
 	determineIfThereAreMyUnitsWithoutMci(function(bMyUnitsWithoutMci){
 		if (bMyUnitsWithoutMci){
 			bWitnessingUnderWay = false;
-			return;
+			return console.log('my units without mci');
 		}
 		storage.readLastMainChainIndex(function(max_mci){
 			let col = (conf.storage === 'mysql') ? 'main_chain_index' : 'unit_authors.rowid';
