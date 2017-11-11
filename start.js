@@ -95,7 +95,7 @@ function checkAndWitness(){
 		storage.readLastMainChainIndex(function(max_mci){
 			let col = (conf.storage === 'mysql') ? 'main_chain_index' : 'unit_authors.rowid';
 			db.query(
-				"SELECT main_chain_index AS max_my_mci FROM units JOIN unit_authors USING(unit) WHERE address=? ORDER BY "+col+" DESC LIMIT 1", 
+				"SELECT main_chain_index AS max_my_mci FROM units JOIN unit_authors USING(unit) WHERE +address=? ORDER BY "+col+" DESC LIMIT 1", 
 				[my_address], 
 				function(rows){
 					var max_my_mci = (rows.length > 0) ? rows[0].max_my_mci : -1000;
