@@ -13,7 +13,7 @@ To become a winess, you are expected to:
 * be trusted
 * have a lot to lose (material and/or nonmaterial) in case of misbehavior.  The loss is your business (outside Byteball) and/or reputation
 * have enough technical expertise to ensure uninterrupted operation 24/7 and security of your private keys (they must not be stolen and used to post on your behalf)
-* be prepared to adapt your own witness list when you feel the community wants to change the list in some way.  This includes removing your witness from the witness list.
+* be prepared to adapt your own witness list when you feel the community wants to change the list in some way and the new candidate satisfies the above rules.  This includes removing your witness from the witness list.
 
 If you think that you satisfy these criteria, this is your course of action:
 * start running this code, or other code that periodically posts from a constant address.  At this point you are burning money on fees and not earning anything as witness.
