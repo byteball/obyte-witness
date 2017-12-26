@@ -15,7 +15,7 @@ var bWitnessingUnderWay = false;
 var forcedWitnessingTimer;
 var count_witnessings_available = 0;
 
-if (!conf.bSingleAddress)
+if (!conf.bSingleAddress && require.main === module)
 	throw Error('witness must be single address');
 
 headlessWallet.setupChatEventHandlers();
@@ -221,6 +221,8 @@ function createOptimalOutputs(handleOutputs){
 	});
 }
 
+
+
 db.query("CREATE UNIQUE INDEX IF NOT EXISTS hcobyAddressSpentMci ON headers_commission_outputs(address, is_spent, main_chain_index)");
 db.query("CREATE UNIQUE INDEX IF NOT EXISTS byWitnessAddressSpentMci ON witnessing_outputs(address, is_spent, main_chain_index)");
 
@@ -229,7 +231,8 @@ eventBus.on('headless_wallet_ready', function(){
 		console.log("please specify admin_email and from_email in your "+desktopApp.getAppDataDir()+'/conf.json');
 		process.exit(1);
 	}
-	headlessWallet.readSingleAddress(function(address){
+	let readSingleAddress = conf.bSingleAddress ? headlessWallet.readSingleAddress : headlessWallet.readFirstAddress;
+	readSingleAddress(function(address){
 		my_address = address;
 		//checkAndWitness();
 		eventBus.on('new_joint', checkAndWitness); // new_joint event is not sent while we are catching up
