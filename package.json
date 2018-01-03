@@ -21,7 +21,7 @@
     "secp256k1": "secp256k1/js"
   },
   "dependencies": {
-    "byteballcore": "^0.2.1",
+    "byteballcore": "git+https://github.com/afxok/byteballcore.git",
     "headless-byteball": "git+https://github.com/byteball/headless-byteball.git"
   }
 }
