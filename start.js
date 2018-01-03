@@ -229,7 +229,7 @@ db.query(
     'SELECT ''index hcobyAddressSpentMci exists''', \n\
     'CREATE INDEX hcobyAddressSpentMci ON headers_commission_outputs(address, is_spent, main_chain_index)')",
     function(rows) {
-        console.log(JSON.stringify(rows[0]);
+        console.log(JSON.stringify(rows[0]));
         db.query(rows[0]);
     });
 
@@ -241,7 +241,7 @@ db.query(
     'SELECT ''index byWitnessAddressSpentMci exists''', \n\
     'CREATE INDEX byWitnessAddressSpentMci ON witnessing_outputs(address, is_spent, main_chain_index)')",
     function(rows) {
-        console.log(JSON.stringify(rows[0]);
+        console.log(JSON.stringify(rows[0]));
         db.query(rows[0]);
     });
 
