@@ -222,27 +222,29 @@ function createOptimalOutputs(handleOutputs){
 }
 
 db.query(
-    "SELECT IF (EXISTS( \n\
+    "SELECT (IF (EXISTS( \n\
         SELECT DISTINCT index_name \n\
         FROM information_schema.statistics \n\
         WHERE table_schema = 'byteball' AND table_name = 'headers_commission_outputs' AND index_name LIKE 'hcobyAddressSpentMci'), \n\
     'SELECT ''index hcobyAddressSpentMci exists''', \n\
-    'CREATE INDEX hcobyAddressSpentMci ON headers_commission_outputs(address, is_spent, main_chain_index)')",
+    'CREATE INDEX hcobyAddressSpentMci ON headers_commission_outputs(address, is_spent, main_chain_index)')) AS stmt",
     function(rows) {
-        console.log(JSON.stringify(rows[0]));
-        db.query(rows[0]);
+        console.log(JSON.stringify(rows[0].stmt));
+        db.query(rows[0].stmt);
     });
 
 db.query(
-    "SELECT IF (EXISTS( \n\
-        SELECT DISTINCT index_name \n\
-        FROM information_schema.statistics \n\
-        WHERE table_schema = 'byteball' AND table_name = 'witnessing_outputs' AND index_name LIKE 'byWitnessAddressSpentMci'), \n\
+    "SELECT (\n\
+        IF (EXISTS( \n\
+    	    SELECT DISTINCT index_name \n\
+    	    FROM information_schema.statistics \n\
+    	    WHERE table_schema = 'byteball' AND table_name = 'witnessing_outputs' AND index_name LIKE 'byWitnessAddressSpentMci' \n\
+        ), \n\
     'SELECT ''index byWitnessAddressSpentMci exists''', \n\
-    'CREATE INDEX byWitnessAddressSpentMci ON witnessing_outputs(address, is_spent, main_chain_index)')",
+    'CREATE INDEX byWitnessAddressSpentMci ON witnessing_outputs(address, is_spent, main_chain_index)')) AS stmt",
     function(rows) {
-        console.log(JSON.stringify(rows[0]));
-        db.query(rows[0]);
+        console.log(JSON.stringify(rows[0].stmt));
+        db.query(rows[0].stmt);
     });
 
 
