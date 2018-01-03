@@ -230,8 +230,8 @@ db.query(
         WHERE table_schema = 'byteball' AND table_name = 'headers_commission_outputs' AND index_name LIKE 'hcobyAddressSpentMci'), \n\
     'SELECT ''index hcobyAddressSpentMci exists'' _______;', \n\
     'CREATE INDEX hcobyAddressSpentMci ON headers_commission_outputs(address, is_spent, main_chain_index)') into @a; \n\
-    PREPARE stmt1 FROM @a;
-    EXECUTE stmt1;
+    PREPARE stmt1 FROM @a; \n\
+    EXECUTE stmt1; \n\
     DEALLOCATE PREPARE stmt1;");
 
 db.query(
@@ -241,8 +241,8 @@ db.query(
         WHERE table_schema = 'byteball' AND table_name = 'witnessing_outputs' AND index_name LIKE 'byWitnessAddressSpentMci'), \n\
     'SELECT ''index byWitnessAddressSpentMci exists'' _______;', \n\
     'CREATE INDEX byWitnessAddressSpentMci ON witnessing_outputs(address, is_spent, main_chain_index)') into @a; \n\
-    PREPARE stmt1 FROM @a;
-    EXECUTE stmt1;
+    PREPARE stmt1 FROM @a; \n\
+    EXECUTE stmt1; \n\
     DEALLOCATE PREPARE stmt1;");
 
 
