@@ -165,6 +165,7 @@ function witnessBeforeThreshold(){
 }
 
 function readNumberOfWitnessingsAvailable(handleNumber){
+	return handleNumber(2*conf.MIN_AVAILABLE_WITNESSINGS);
 	count_witnessings_available--;
 	if (count_witnessings_available > conf.MIN_AVAILABLE_WITNESSINGS)
 		return handleNumber(count_witnessings_available);
