@@ -9,6 +9,7 @@ var headlessWallet = require('headless-byteball');
 var desktopApp = require('byteballcore/desktop_app.js');
 var objectHash = require('byteballcore/object_hash.js');
 
+const MIN_INTERVAL = conf.MIN_INTERVAL || 60*1000;
 var WITNESSING_COST = 600; // size of typical witnessing unit
 var my_address;
 var bWitnessingUnderWay = false;
@@ -104,7 +105,7 @@ function checkAndWitness(){
 					let last_ts = (rows.length > 0) ? rows[0].last_ts : 0;
 					let interval = Date.now() - last_ts*1000;
 					console.log("distance="+distance+", interval="+(interval/1000)+"s");
-					if (interval < conf.MIN_INTERVAL){
+					if (interval < MIN_INTERVAL){
 						bWitnessingUnderWay = false;
 						return console.log("witnessed recently, skipping");
 					}
