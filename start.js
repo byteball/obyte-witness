@@ -102,12 +102,11 @@ function checkAndWitness(){
 					var max_my_mci = (rows.length > 0) ? rows[0].max_my_mci : -1000;
 					var distance = max_mci - max_my_mci;
 					let last_ts = (rows.length > 0) ? rows[0].last_ts : 0;
-					let interval = Date.now() - last_ts;
+					let interval = Date.now() - last_ts*1000;
 					console.log("distance="+distance+", interval="+(interval/1000)+"s");
 					if (interval < conf.MIN_INTERVAL){
-						console.log("witnessed recently, skipping");
 						bWitnessingUnderWay = false;
-						return;
+						return console.log("witnessed recently, skipping");
 					}
 					if (distance > conf.THRESHOLD_DISTANCE){
 						console.log('distance above threshold, will witness');
