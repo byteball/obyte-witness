@@ -17,6 +17,7 @@ exports.payout_address = 'WHERE THE MONEY CAN BE SENT TO';
 
 exports.bSingleAddress = true;
 exports.THRESHOLD_DISTANCE = 50;
+exports.MIN_INTERVAL = 60*1000; // min interval between witnessings in milliseconds
 exports.MIN_AVAILABLE_WITNESSINGS = 100;
 
 exports.KEYS_FILENAME = 'keys.json';

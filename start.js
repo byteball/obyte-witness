@@ -95,12 +95,20 @@ function checkAndWitness(){
 		storage.readLastMainChainIndex(function(max_mci){
 			let col = (conf.storage === 'mysql') ? 'main_chain_index' : 'unit_authors.rowid';
 			db.query(
-				"SELECT main_chain_index AS max_my_mci FROM units JOIN unit_authors USING(unit) WHERE +address=? ORDER BY "+col+" DESC LIMIT 1", 
+				"SELECT main_chain_index AS max_my_mci, "+db.getUnixTimestamp('creation_date')+" AS last_ts \n\
+				FROM units JOIN unit_authors USING(unit) WHERE +address=? ORDER BY "+col+" DESC LIMIT 1", 
 				[my_address], 
 				function(rows){
 					var max_my_mci = (rows.length > 0) ? rows[0].max_my_mci : -1000;
 					var distance = max_mci - max_my_mci;
-					console.log("distance="+distance);
+					let last_ts = (rows.length > 0) ? rows[0].last_ts : 0;
+					let interval = Date.now() - last_ts;
+					console.log("distance="+distance+", interval="+(interval/1000)+"s");
+					if (interval < conf.MIN_INTERVAL){
+						console.log("witnessed recently, skipping");
+						bWitnessingUnderWay = false;
+						return;
+					}
 					if (distance > conf.THRESHOLD_DISTANCE){
 						console.log('distance above threshold, will witness');
 						setTimeout(function(){
