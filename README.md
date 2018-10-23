@@ -6,7 +6,7 @@ Running this code is not the only way to run a witness.  If some other (more use
 
 ## Requirements
 
-To become a winess, you are expected to:
+To become a witness, you are expected to:
 
 * have a publicly known real name, no anonymity
 * be well known in the community
