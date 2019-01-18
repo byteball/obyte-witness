@@ -1,13 +1,23 @@
 /*jslint node: true */
 "use strict";
-var conf = require('byteballcore/conf.js');
-var db = require('byteballcore/db.js');
-var storage = require('byteballcore/storage.js');
-var eventBus = require('byteballcore/event_bus.js');
-var mail = require('byteballcore/mail.js');
-var headlessWallet = require('headless-byteball');
-var desktopApp = require('byteballcore/desktop_app.js');
-var objectHash = require('byteballcore/object_hash.js');
+var fs = require('fs');
+var desktopApp = require('ocore/desktop_app.js');
+var appDataDir = desktopApp.getAppDataDir();
+var path = require('path');
+
+if (require.main === module && !fs.existsSync(appDataDir) && fs.existsSync(path.dirname(appDataDir)+'/byteball-witness')){
+	console.log('=== will rename old witness data dir');
+	fs.renameSync(path.dirname(appDataDir)+'/byteball-witness', appDataDir);
+}
+
+
+var conf = require('ocore/conf.js');
+var db = require('ocore/db.js');
+var storage = require('ocore/storage.js');
+var eventBus = require('ocore/event_bus.js');
+var mail = require('ocore/mail.js');
+var headlessWallet = require('headless-obyte');
+var objectHash = require('ocore/object_hash.js');
 
 const MIN_INTERVAL = conf.MIN_INTERVAL || 60*1000;
 var WITNESSING_COST = 600; // size of typical witnessing unit
@@ -46,8 +56,8 @@ function witness(onDone){
 		notifyAdminAboutFailedWitnessing(err);
 		setTimeout(onDone, 60000); // pause after error
 	}
-	var network = require('byteballcore/network.js');
-	var composer = require('byteballcore/composer.js');
+	var network = require('ocore/network.js');
+	var composer = require('ocore/composer.js');
 	if (!network.isConnected()){
 		console.log('not connected, skipping');
 		return onDone();

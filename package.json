@@ -1,27 +1,28 @@
 {
-  "name": "byteball-witness",
-  "description": "Byteball witness",
-  "author": "Byteball",
+  "name": "obyte-witness",
+  "description": "Obyte witness",
+  "author": "Obyte",
   "version": "0.1.7",
   "main": "start.js",
   "keywords": [
     "witness",
+    "obyte",
     "byteball"
   ],
   "license": "MIT",
   "repository": {
-    "url": "git://github.com/byteball/byteball-witness.git",
+    "url": "git://github.com/byteball/obyte-witness.git",
     "type": "git"
   },
   "bugs": {
-    "url": "https://github.com/byteball/byteball-witness/issues"
+    "url": "https://github.com/byteball/obyte-witness/issues"
   },
   "browser": {
     "request": "browser-request",
     "secp256k1": "secp256k1/js"
   },
   "dependencies": {
-    "byteballcore": "git+https://github.com/byteball/byteballcore.git",
-    "headless-byteball": "git+https://github.com/byteball/headless-byteball.git"
+    "ocore": "git+https://github.com/byteball/ocore.git",
+    "headless-obyte": "git+https://github.com/byteball/headless-obyte.git"
   }
 }
