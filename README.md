@@ -26,7 +26,7 @@ Install node.js, clone the repository, then say
 ```sh
 npm install
 ```
-Enabling TOR is highly recommended in order to keep your IP address unknown to potential attackers.  See [ocore](../../../ocore) documentation.
+Enabling TOR is highly recommended in order to keep your IP address unknown to potential attackers.  See [ocore](https://github.com/byteball/ocore#confsockshost-confsocksport-and-confsockslocaldns) documentation.
 
 ## Run
 ```sh
