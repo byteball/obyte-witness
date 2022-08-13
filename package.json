@@ -26,6 +26,5 @@
     "headless-obyte": "git+https://github.com/byteball/headless-obyte.git"
   },
   "resolutions": {
-    "level-rocksdb": "^4.0.0"
   }
 }
