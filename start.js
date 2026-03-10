@@ -240,10 +240,34 @@ function createOptimalOutputs(handleOutputs){
 	});
 }
 
+db.query(
+    "SELECT (IF (EXISTS( \n\
+        SELECT DISTINCT index_name \n\
+        FROM information_schema.statistics \n\
+        WHERE table_schema = 'byteball' AND table_name = 'headers_commission_outputs' AND index_name LIKE 'hcobyAddressSpentMci'), \n\
+    'SELECT ''index hcobyAddressSpentMci exists''', \n\
+    'CREATE INDEX hcobyAddressSpentMci ON headers_commission_outputs(address, is_spent, main_chain_index)')) AS stmt",
+    function(rows) {
+        db.query(rows[0].stmt);
+    });
+
+db.query(
+    "SELECT (\n\
+        IF (EXISTS( \n\
+    	    SELECT DISTINCT index_name \n\
+    	    FROM information_schema.statistics \n\
+    	    WHERE table_schema = 'byteball' AND table_name = 'witnessing_outputs' AND index_name LIKE 'byWitnessAddressSpentMci' \n\
+        ), \n\
+    'SELECT ''index byWitnessAddressSpentMci exists''', \n\
+    'CREATE INDEX byWitnessAddressSpentMci ON witnessing_outputs(address, is_spent, main_chain_index)')) AS stmt",
+    function(rows) {
+        db.query(rows[0].stmt);
+    });
 
 
-db.query("CREATE UNIQUE INDEX IF NOT EXISTS hcobyAddressSpentMci ON headers_commission_outputs(address, is_spent, main_chain_index)");
-db.query("CREATE UNIQUE INDEX IF NOT EXISTS byWitnessAddressSpentMci ON witnessing_outputs(address, is_spent, main_chain_index)");
+
+
+
 
 eventBus.on('headless_wallet_ready', function(){
 	if (!conf.admin_email || !conf.from_email){
