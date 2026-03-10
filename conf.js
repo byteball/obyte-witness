@@ -5,6 +5,7 @@ exports.port = null;
 //exports.myUrl = 'wss://mydomain.com/bb';
 exports.bServeAsHub = false;
 exports.bLight = false;
+exports.bDryRunNewTriggers = true;
 
 exports.storage = 'sqlite';
 
