@@ -6,6 +6,7 @@ exports.port = null;
 exports.bServeAsHub = false;
 exports.bLight = false;
 exports.bDryRunNewTriggers = true;
+exports.bIgnorePrivatePayments = true;
 
 exports.storage = 'sqlite';
 
